@@ -27,8 +27,8 @@ public class WordCloudApplication extends Application<WordCloudConfiguration> {
     @Override
     public void run(WordCloudConfiguration configuration,
                     Environment environment) {
-        String config = "org.wordcloud.properties";
-        String springConfig = "org.wordcloud.xml";
+        String config = "wordcloud.properties";
+        String springConfig = "wordcloud.xml";
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             try (InputStream resourceStream = loader.getResourceAsStream(config)) {

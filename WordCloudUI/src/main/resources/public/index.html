@@ -1,14 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hello jQuery</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="requests.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="jquery.tagcanvas.js"></script>
+    <script>
+        function redraw() {
+            if (!$('#myCanvas').tagcanvas({
+                        textColour: '#ff0000',
+                        outlineColour: '#ff00ff',
+                        reverse: true,
+                        depth: 0.8,
+                        maxSpeed: 0.05
+                    }, 'tags')) {
+                // something went wrong, hide the canvas container
+                $('#myCanvasContainer').hide();
+            }
+        }
+        $(document).ready(function () {
+            $("button").click(function () {
+                $('#tags li').remove();
+                var query = $('#queryField').val();
+                var protocol = $('#protocolField').val();
+                $.ajax({
+                    url: "/wordcloud?query=" + query + "&protocol=" + protocol, success: function (result) {
+                        for (var ind in result) {
+                            $("#tags").append('<li><a href="/dummy"><span class="tab">' + result[ind] + '</span></a></li>');
+                        }
+                        redraw();
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
-    <div>
 
-    </div>
+First name:<br>
+<input type="text" name="query" id="queryField">
+<br>
+
+<select id="protocolField">
+    <option value="twitter">Twitter Hashtag</option>
+    <option value="rss">Rss Link</option>
+</select>
+
+<br>
+<br>
+<button>Execute</button>
+<br>
+<br>
+
+<div id="myCanvasContainer">
+    <canvas width="500" height="500" id="myCanvas">
+        <p>Anything in here will be replaced on browsers that support the canvas element</p>
+    </canvas>
+</div>
+<div id="tags">
+    <ul>
+    </ul>
+</div>
 </body>
 </html>

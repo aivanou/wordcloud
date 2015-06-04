@@ -8,6 +8,8 @@ import java.util.*;
 
 public class WordProcessorImpl implements WordProcessor<Word> {
 
+    private final static int MAX_SIZE = 100;
+
     private Set<String> forbiddenWords = new HashSet<>();
 
     public WordProcessorImpl(InputStream in) throws IOException {
@@ -38,11 +40,31 @@ public class WordProcessorImpl implements WordProcessor<Word> {
                 }
             }
         }
-        Set<Word> sortedWords = new TreeSet<>(new WordComparator());
+        TreeSet<Word> sortedWords = new TreeSet<>(new WordComparator());
         for (Map.Entry<String, Integer> entry : words.entrySet()) {
             sortedWords.add(new Word(entry.getKey(), entry.getValue()));
         }
-        return sortedWords;
+        return subset(sortedWords, MAX_SIZE);
+    }
+
+    private Set<Word> subset(NavigableSet<Word> words, int maxSize) {
+        if (words.isEmpty())
+            return words;
+        int ind = 0;
+        Iterator<Word> it = words.descendingIterator();
+        Word lastWord = null;
+        Set<Word> hashSet = new HashSet<>();
+        for (; it.hasNext(); ind++) {
+            Word w = it.next();
+            hashSet.add(w);
+            if (ind == maxSize) {
+                lastWord = w;
+                break;
+            }
+        }
+        if (lastWord == null)
+            return words;
+        return hashSet;
     }
 
     private String processWord(String unprocessedWord) {

@@ -34,7 +34,7 @@ public class TwitterProtocol extends AsyncExecutor implements Protocol {
     }
 
     private String transformQuery(String query) {
-        return "%23" + query.substring(1);
+        return "%23" + query;
     }
 
     private Reader transformResults(QueryResult result) {

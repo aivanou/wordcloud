@@ -56,7 +56,6 @@ public class RssProtocol extends AsyncExecutor implements Protocol {
         StringBuilder sb = new StringBuilder();
         for (SyndEntry entry : entries) {
             sb.append(entry.getDescription().getValue());
-            System.out.println(entry.getDescription().getValue());
         }
         return new StringReader(sb.toString());
     }

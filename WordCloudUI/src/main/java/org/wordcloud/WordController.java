@@ -1,5 +1,6 @@
 package org.wordcloud;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +18,9 @@ public class WordController {
     @RequestMapping(value = "/wordcloud", method = RequestMethod.GET)
     public Collection<String> executeQuery(@RequestParam String query, @RequestParam String protocol) {
         RestTemplate restTemplate = new RestTemplate();
-        Collection<Word> words = (Collection<Word>) restTemplate.getForObject("http://localhost:8090/api?query=%23superbowl&protocol=twitter", Word.class);
+        String queryUrl = String.format("http://localhost:8090/api?query=%s&protocol=%s", query, protocol);
+        ResponseEntity<Word[]> response = restTemplate.getForEntity(queryUrl, Word[].class);
+        Word[] words = response.getBody();
         Collection<String> strs = new ArrayList<>();
         for (Word w : words) {
             strs.add(w.getWord());

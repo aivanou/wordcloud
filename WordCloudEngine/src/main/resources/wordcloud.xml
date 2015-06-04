@@ -8,17 +8,17 @@
           destroy-method="shutdownNow"/>
 
     <bean id="twitterProtocol"
-          class="org.org.wordcloud.protocol.impl.TwitterProtocol">
+          class="org.wordcloud.protocol.impl.TwitterProtocol">
         <constructor-arg ref="executorService"/>
     </bean>
 
     <bean id="rssProtocol"
-          class="org.org.wordcloud.protocol.impl.RssProtocol">
+          class="org.wordcloud.protocol.impl.RssProtocol">
         <constructor-arg ref="executorService"/>
     </bean>
 
     <bean id="protocolFactory"
-          class="org.org.wordcloud.protocol.ProtocolFactory">
+          class="org.wordcloud.protocol.ProtocolFactory">
         <constructor-arg>
             <map>
                 <entry key="twitter" value-ref="twitterProtocol"/>
@@ -28,7 +28,7 @@
     </bean>
 
     <bean id="wordProcessor"
-          class="org.org.wordcloud.handler.impl.WordProcessorImpl">
+          class="org.wordcloud.handler.impl.WordProcessorImpl">
     </bean>
 
 
