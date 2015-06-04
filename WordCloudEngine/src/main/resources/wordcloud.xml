@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="executorService" class="java.util.concurrent.Executors"
+          factory-method="newCachedThreadPool"
+          destroy-method="shutdownNow"/>
+
+    <bean id="twitterProtocol"
+          class="org.org.wordcloud.protocol.impl.TwitterProtocol">
+        <constructor-arg ref="executorService"/>
+    </bean>
+
+    <bean id="rssProtocol"
+          class="org.org.wordcloud.protocol.impl.RssProtocol">
+        <constructor-arg ref="executorService"/>
+    </bean>
+
+    <bean id="protocolFactory"
+          class="org.org.wordcloud.protocol.ProtocolFactory">
+        <constructor-arg>
+            <map>
+                <entry key="twitter" value-ref="twitterProtocol"/>
+                <entry key="rss" value-ref="rssProtocol"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="wordProcessor"
+          class="org.org.wordcloud.handler.impl.WordProcessorImpl">
+    </bean>
+
+
+</beans>
