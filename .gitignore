@@ -1,0 +1,6 @@
+*.iml
+WordCloudEngine/target
+WordCloudEngine/*.iml
+WordCloudUI/target
+WordCloudUI/*.iml
+
