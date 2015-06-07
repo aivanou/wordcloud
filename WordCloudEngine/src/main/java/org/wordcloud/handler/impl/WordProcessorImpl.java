@@ -1,38 +1,37 @@
 package org.wordcloud.handler.impl;
 
 import org.wordcloud.handler.WordProcessor;
+import org.wordcloud.handler.transformer.WordTransformerChain;
 import org.wordcloud.objects.Word;
 
 import java.io.*;
 import java.util.*;
 
+/**
+ * The default implementation of WordProcessor which uses @see Word
+ * as object
+ */
 public class WordProcessorImpl implements WordProcessor<Word> {
 
     private final static int MAX_SIZE = 100;
 
-    private Set<String> forbiddenWords = new HashSet<>();
+    private WordTransformerChain transformerChain;
 
-    public WordProcessorImpl(InputStream in) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        fillForbiddenWords(reader);
-    }
-
-    public WordProcessorImpl(File fWords) throws IOException {
-        this(new FileInputStream(fWords));
-    }
-
-    public WordProcessorImpl() {
-        this.forbiddenWords = new HashSet<>();
+    public WordProcessorImpl(WordTransformerChain chain) {
+        this.transformerChain = chain;
     }
 
     public Set<Word> process(Reader reader) throws IOException {
+        if (reader == null)
+            throw new NullPointerException("reader cannot be null");
         Map<String, Integer> words = new TreeMap<String, Integer>();
         BufferedReader bufReader = new BufferedReader(reader);
         String line;
         while ((line = bufReader.readLine()) != null) {
             String[] lineWords = line.trim().split("[ \t]+");
             for (String lineWord : lineWords) {
-                lineWord = processWord(lineWord);
+                lineWord = transformerChain.transformChain(lineWord);
+                if (lineWord.isEmpty()) continue;
                 if (!words.containsKey(lineWord)) {
                     words.put(lineWord, 1);
                 } else {
@@ -44,41 +43,7 @@ public class WordProcessorImpl implements WordProcessor<Word> {
         for (Map.Entry<String, Integer> entry : words.entrySet()) {
             sortedWords.add(new Word(entry.getKey(), entry.getValue()));
         }
-        return subset(sortedWords, MAX_SIZE);
-    }
-
-    private Set<Word> subset(NavigableSet<Word> words, int maxSize) {
-        if (words.isEmpty())
-            return words;
-        int ind = 0;
-        Iterator<Word> it = words.descendingIterator();
-        Word lastWord = null;
-        Set<Word> hashSet = new HashSet<>();
-        for (; it.hasNext(); ind++) {
-            Word w = it.next();
-            hashSet.add(w);
-            if (ind == maxSize) {
-                lastWord = w;
-                break;
-            }
-        }
-        if (lastWord == null)
-            return words;
-        return hashSet;
-    }
-
-    private String processWord(String unprocessedWord) {
-        unprocessedWord = unprocessedWord.trim().toLowerCase();
-        if (forbiddenWords.contains(unprocessedWord))
-            return "";
-        return unprocessedWord;
-    }
-
-    private void fillForbiddenWords(BufferedReader reader) throws IOException {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            forbiddenWords.add(line.trim().toLowerCase());
-        }
+        return sortedWords;
     }
 
     private static class WordComparator implements Comparator<Word> {
@@ -98,5 +63,8 @@ public class WordProcessorImpl implements WordProcessor<Word> {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
     }
 }

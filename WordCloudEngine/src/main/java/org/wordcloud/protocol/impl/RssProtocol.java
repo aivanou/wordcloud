@@ -24,6 +24,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/***
+ * Implements the RSS consumer using ROME library
+ *
+ */
 public class RssProtocol extends AsyncExecutor implements Protocol {
 
     private DocumentBuilderFactory builderFactory;
@@ -62,7 +66,7 @@ public class RssProtocol extends AsyncExecutor implements Protocol {
 
     private void validateURL(String url) throws ProtocolException {
         try {
-            URL u = new URL(url);
+            new URL(url);
         } catch (MalformedURLException e) {
             throw new ProtocolException(e);
         }

@@ -7,6 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.wordcloud.handler.WordProcessor;
 import org.wordcloud.objects.Word;
 import org.wordcloud.protocol.ProtocolFactory;
+import org.wordcloud.service.WordService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,10 +40,10 @@ public class WordCloudApplication extends Application<WordCloudConfiguration> {
         }
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(String.valueOf(loader.getResource(springConfig)));
         ProtocolFactory protocolFactory = (ProtocolFactory) context.getBean("protocolFactory");
-        WordProcessor<Word> wordProcessor = (WordProcessor<Word>) context.getBean("wordProcessor");
-        final WordResource resource = new WordResource(protocolFactory, wordProcessor);
+        WordService service = (WordService) context.getBean("wordService");
+        final WordResource resource = new WordResource(service);
         environment.jersey().register(resource);
-        ProtocolManager pm = new ProtocolManager();
+        ProtocolManager pm = new ProtocolManager(protocolFactory);
         environment.lifecycle().manage(pm);
     }
 

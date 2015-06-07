@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
+/**
+ * Word class, used in @see org.wordcloud.handler.WordProcessor
+ */
 public class Word implements Serializable {
     private String word;
     private int count;

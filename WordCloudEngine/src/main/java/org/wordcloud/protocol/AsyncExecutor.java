@@ -3,9 +3,10 @@ package org.wordcloud.protocol;
 import java.io.Reader;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * Defines methods for asynchronous execution, aggregates ExecutorService
+ */
 public abstract class AsyncExecutor implements Protocol {
-
-    //Todo: shutdown exec on exit
 
     private final ExecutorService exec;
 

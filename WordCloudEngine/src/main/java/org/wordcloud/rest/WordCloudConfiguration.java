@@ -3,6 +3,9 @@ package org.wordcloud.rest;
 
 import io.dropwizard.Configuration;
 
+/**
+ * Configuration class for dropwisard
+ */
 public class WordCloudConfiguration extends Configuration {
 
 

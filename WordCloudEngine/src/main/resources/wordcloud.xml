@@ -27,8 +27,31 @@
         </constructor-arg>
     </bean>
 
+    <bean id="forbiddenWordsTransformer"
+          class="org.wordcloud.handler.transformer.ForbiddenWordsTransformer">
+        <constructor-arg value="prepositions.txt"/>
+    </bean>
+
+
+    <bean id="lowerCaseTransformer"
+          class="org.wordcloud.handler.transformer.LowerCaseWordTransformer">
+        <constructor-arg ref="forbiddenWordsTransformer"/>
+    </bean>
+
     <bean id="wordProcessor"
           class="org.wordcloud.handler.impl.WordProcessorImpl">
+        <constructor-arg ref="lowerCaseTransformer"/>
+    </bean>
+
+    <bean id="cache"
+          class="org.wordcloud.cache.impl.DummyCache">
+    </bean>
+
+    <bean id="wordService"
+          class="org.wordcloud.service.impl.WordServiceImpl">
+        <constructor-arg index="0" ref="protocolFactory"/>
+        <constructor-arg index="1" ref="cache"/>
+        <constructor-arg index="2" ref="wordProcessor"/>
     </bean>
 
 

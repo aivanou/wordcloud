@@ -11,6 +11,9 @@ import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Implements hashtag searching using twitter4j library
+ */
 public class TwitterProtocol extends AsyncExecutor implements Protocol {
 
     private final Twitter twitter = TwitterFactory.getSingleton();
@@ -34,6 +37,7 @@ public class TwitterProtocol extends AsyncExecutor implements Protocol {
     }
 
     private String transformQuery(String query) {
+        //%23 -- # code
         return "%23" + query;
     }
 
