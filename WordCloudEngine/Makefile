@@ -1,13 +1,11 @@
+port = 8090
 
-all: install test deploy
+all: install deploy
 
 install:
-	mvn clean install
-
-test: install
-	mvn test
+	mvn clean test install
 
 deploy:
 	sudo docker build -t wordcloud/engine .
-	sudo docker run -it -p 8090:8090 wordcloud/engine
+	sudo docker run -it -p $(port):$(port) wordcloud/engine
 

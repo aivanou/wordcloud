@@ -24,19 +24,21 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/***
+/**
  * Implements the RSS consumer using ROME library
- *
  */
 public class RssProtocol extends AsyncExecutor implements Protocol {
 
-    private DocumentBuilderFactory builderFactory;
     private DocumentBuilder documentBuilder;
 
-    public RssProtocol(ExecutorService exec) throws ParserConfigurationException {
+    public RssProtocol(ExecutorService exec) {
         super(exec);
-        builderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilder = builderFactory.newDocumentBuilder();
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        try {
+            documentBuilder = builderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     public Reader search(String query) throws ProtocolException {

@@ -22,22 +22,13 @@ public class WordCloudApplication extends Application<WordCloudConfiguration> {
 
     @Override
     public void initialize(Bootstrap<WordCloudConfiguration> bootstrap) {
-        // nothing to do yet
     }
 
     @Override
     public void run(WordCloudConfiguration configuration,
                     Environment environment) {
-        String config = "wordcloud.properties";
-        String springConfig = "wordcloud.xml";
+        String springConfig = configuration.getSpringFile();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try {
-            try (InputStream resourceStream = loader.getResourceAsStream(config)) {
-                System.getProperties().load(resourceStream);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(String.valueOf(loader.getResource(springConfig)));
         ProtocolFactory protocolFactory = (ProtocolFactory) context.getBean("protocolFactory");
         WordService service = (WordService) context.getBean("wordService");

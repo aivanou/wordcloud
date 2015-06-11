@@ -1,4 +1,5 @@
 *.iml
+.idea
 WordCloudEngine/target
 WordCloudEngine/*.iml
 WordCloudUI/target

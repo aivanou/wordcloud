@@ -1,3 +1,4 @@
+springFile: wordcloud.xml
 server:
   applicationConnectors:
   - type: http
